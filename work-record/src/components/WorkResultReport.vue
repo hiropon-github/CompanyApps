@@ -10,59 +10,34 @@
         {{ option.name }}
       </option>
     </select>
-    <select v-model="startTimeH.name">
-      <option v-for="(sth, index) in startTimeH" v-bind:value="sth.name" v-bind:key="`sth-${index}`">
-        {{ sth.name }}
-      </option>
-    </select>
-    <select v-model="startTimeM.name">
-      <option v-for="(stm, index) in startTimeM" v-bind:value="stm.name" v-bind:key="`stm-${index}`">
-        {{ stm.name }}
-      </option>
-    </select>
-    <select v-model="endTimeH.name">
-      <option v-for="(edh, index) in endTimeH" v-bind:value="edh.name" v-bind:key="`edh-${index}`">
-        {{ edh.name }}
-      </option>
-    </select>
-    <select v-model="endTimeM.name">
-      <option v-for="(edm, index) in endTimeM" v-bind:value="edm.name" v-bind:key="`edm-${index}`">
-        {{ edm.name }}
-      </option>
-    </select>
-    <div id="pf"></div>
-    <p v-show="show">aaa</p>
-    <select v-model="tests.name">
-      <option v-for="(test, index) in tests" v-bind:value="test.name" v-bind:key="`second-${index}`">
-        {{ test.value }}
-      </option>
-    </select>
     <ul>
-        <li v-for="(dc, x) in dayCount" :key="x">
+        <li v-for="(dc, x) in dayCount" :key="x" v-bind:name="`day-${x}`">
             <span>{{month}}月{{('0' + dc).slice(-2)}}日</span>
-            <select v-model="startTimeH.name">
-            <option v-for="(sth, index) in startTimeH" v-bind:value="`sth.name-${dc}`" v-bind:key="`sth-${index}`">
+            <select v-model="sthSelect">
+            <option v-for="(sth, index) in startTimeH" v-bind:value="`sth-${sth.name}-${x}`" v-bind:key="`${index}`">
                 {{ sth.name }}
             </option>
             </select>
-            <select v-model="startTimeM.name">
-            <option v-for="(stm, index) in startTimeM" v-bind:value="stm.name" v-bind:key="`stm-${index}`">
+            <select v-model="stmSelect">
+            <option v-for="(stm, index) in startTimeM" v-bind:value="`stm-${stm.name}-${x}`" v-bind:key="`${index}`">
                 {{ stm.name }}
             </option>
             </select>
             <span>~</span>
-            <select v-model="endTimeH.name">
-            <option v-for="(edh, index) in endTimeH" v-bind:value="edh.name" v-bind:key="`edh-${index}`">
+            <select v-model="edhSelect">
+            <option v-for="(edh, index) in endTimeH" v-bind:value="`edh-${edh.name}-${x}`" v-bind:key="`${index}`">
                 {{ edh.name }}
             </option>
             </select>
-            <select v-model="endTimeM.name">
-            <option v-for="(edm, index) in endTimeM" v-bind:value="edm.name" v-bind:key="`edm-${index}`">
+            <select v-model="edmSelect">
+            <option v-for="(edm, index) in endTimeM" v-bind:value="`edm-${edm.name}-${x}`" v-bind:key="`${index}`">
                 {{ edm.name }}
             </option>
             </select>
         </li>
     </ul>
+    <button @click="getSelectValue">SelectValue</button>
+    <p>selectValue = {{ sVal }}</p>
   </div>
 </template>
 
@@ -94,11 +69,16 @@ export default {
       show: false,
       fshow: false,
       month: "",
-      dayCount: 0
+      dayCount: 0,
+      sthSelect: [],
+      stmSelect: [],
+      edhSelect: [],
+      edmSelect: [],
+      sVal: []
     }
   },
   methods: {
-    nextyear () {
+    nextyear: function () {
       this.year += 1
       if(this.show === false)
       {
@@ -114,6 +94,10 @@ export default {
       console.log(moment(this.options.name + '/01' , 'YYYY/MM/DD').endOf('month').format("DD"))
       this.month = moment(this.options.name + '/01' , 'YYYY/MM/DD').format("MM")
       this.dayCount = Number(moment(this.options.name + '/01' , 'YYYY/MM/DD').endOf('month').format("DD"))
+    },
+    getSelectValue: function () {
+      this.sVal = this.sthSelect;
+      console.log(this.sVal)
     }
   }
 }
